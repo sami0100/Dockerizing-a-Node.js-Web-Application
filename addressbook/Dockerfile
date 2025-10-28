@@ -4,17 +4,20 @@ FROM node:18.16.0-alpine3.17
 # Set the working directory inside the container
 WORKDIR /opt/app
 
-# Copy package.json and package-lock.json files into the container
+# Copy package.json and package-lock.json into the container
 COPY package*.json ./
 
-# Install the application dependencies
+# Install application dependencies
 RUN npm install
+
+# Install PM2 globally
+RUN npm install -g pm2
 
 # Copy the rest of the application files into the container
 COPY . .
 
-# Expose port 3000 for the application to be accessed
+# Expose port 3000
 EXPOSE 3000
 
-# Start the application with PM2
-CMD ["npm", "start"]
+# Start the application using PM2
+CMD ["pm2", "start", "bin/www", "--no-daemon"]

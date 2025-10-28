@@ -1,32 +1,33 @@
-version: "3.9"
+version: "3.9"  # Version of Docker Compose
+
 services:
   # PostgreSQL service
   postgres:
-    image: postgres:latest
+    image: postgres:latest  # Use the latest version of PostgreSQL
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: addressbook
+      POSTGRES_USER: postgres  # Default username for PostgreSQL
+      POSTGRES_PASSWORD: postgres  # Default password for PostgreSQL
+      POSTGRES_DB: addressbook  # Name of the database
     ports:
-      - "5432:5432"
+      - "5432:5432"  # Expose PostgreSQL on port 5432 (default port)
     volumes:
-      - addressbook-db:/var/lib/postgresql/data
+      - addressbook-db:/var/lib/postgresql/data  # Data persistence
 
   # Node.js application service
   addressbook:
     build:
-      context: .
+      context: .  # Build the Docker image from the current directory
     environment:
-      DB_HOST: postgres
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: addressbook
-      DB_PORT: 5432
+      DB_HOST: postgres  # Database host (use the service name from above)
+      DB_USER: postgres  # Database user
+      DB_PASSWORD: postgres  # Database password
+      DB_NAME: addressbook  # Database name
+      DB_PORT: 5432  # Database port (PostgreSQL default)
     depends_on:
-      - postgres
+      - postgres  # Make sure PostgreSQL is ready before starting the app
     ports:
-      - "3000:3000"
-    command: npm start
+      - "3001:3000"  # Expose Node.js app on port 3000
+    command: npm start  # Command to run the app
 
 volumes:
-  addressbook-db:
+  addressbook-db:  # Create a named volume for PostgreSQL data
